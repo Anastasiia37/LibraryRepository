@@ -14,7 +14,7 @@ namespace Library.ViewModels.ResponseViewModels
 
         public PublisherResponseViewModel Publisher { get; set; }
 
-        public DateTime? ReleaseDate { get; set; }
+        public DateTime ReleaseDate { get; set; }
 
         public int? CopiesNumber { get; set; }
 

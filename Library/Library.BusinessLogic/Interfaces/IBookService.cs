@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Library.BusinessLogic.DTOs;
 
@@ -14,6 +15,8 @@ namespace Library.BusinessLogic.Interfaces
 
         Task<BookDTO> GetById(int id);
 
-        Task<List<BookDTO>> SearchByTitle(string title);
+        Task<List<BookDTO>> SearchWithCondition(string title, string releaseDate);
+
+        Task Delete(int id);
     }
 }

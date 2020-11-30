@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
 using Library.BusinessLogic.DTOs;
 using Library.BusinessLogic.Interfaces;
+using Library.Helpers;
 using Library.ViewModels.RequestViewModels;
 using Library.ViewModels.ResponseViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Library.ApiControllers
 {
+    [TypeFilter(typeof(CustomExceptionFilter))]
     [Route("api/[controller]")]
     [ApiController]
     public class BookController : ControllerBase
@@ -29,14 +32,38 @@ namespace Library.ApiControllers
         public async Task<IActionResult> Get()
         {
             var books = await _bookService.GetAll();
-            return Ok(_mapper.Map<BookResponseViewModel>(books));
+            return Ok(_mapper.Map<List<BookResponseViewModel>>(books));
         }
 
         // GET api/<BookController>/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            return Ok(_mapper.Map<BookResponseViewModel>(await _bookService.GetById(id)));
+            var book = _mapper.Map<BookResponseViewModel>(await _bookService.GetById(id));
+
+            if (book == null)
+                return NotFound();
+
+            return Ok(book);
+        }
+
+        [HttpGet("title={title}&releaseDate={releaseDate}")]
+        public async Task<IActionResult> Get(string title, string releaseDate)
+        {
+            if (title == null && releaseDate == null)
+            {
+                return BadRequest();
+            }
+
+            var book = _mapper.Map<List<BookResponseViewModel>>
+                (await _bookService.SearchWithCondition(title, releaseDate));
+
+            if (book == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(book);
         }
 
         // POST api/<BookController>
@@ -48,14 +75,7 @@ namespace Library.ApiControllers
                 return BadRequest("Invalid input");
             }
 
-            try
-            {
-                return Ok(await _bookService.Create(_mapper.Map<BookDTO>(book)));
-            }
-            catch
-            {
-                return BadRequest("Error occured");
-            }
+            return Ok(await _bookService.Create(_mapper.Map<BookDTO>(book)));
         }
 
         // PUT api/<BookController>
@@ -67,22 +87,17 @@ namespace Library.ApiControllers
                 return BadRequest("Invalid input");
             }
 
-            try
-            {
-                await _bookService.Update(_mapper.Map<BookDTO>(book));
-            }
-            catch
-            {
-                return BadRequest("Error occured");
-            }
+            await _bookService.Update(_mapper.Map<BookDTO>(book));
 
             return Ok();
         }
 
         // DELETE api/<BookController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            await _bookService.Delete(id);
+            return Ok(id);
         }
     }
 }

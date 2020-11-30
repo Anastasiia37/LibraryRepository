@@ -22,7 +22,7 @@ namespace Library.DAL
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<BookAuthor>()
-                .HasAlternateKey(t => new { t.BookId, t.AuthorId });
+                .HasKey(t => new { t.BookId, t.AuthorId });
 
             modelBuilder.Entity<BookAuthor>()
                 .HasOne(bookAuthor => bookAuthor.Book)

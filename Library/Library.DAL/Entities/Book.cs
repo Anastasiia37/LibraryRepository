@@ -10,9 +10,11 @@ namespace Library.DAL.Entities
         [Required]
         public string Title { get; set; }
 
+        public int PublisherId { get; set; }
+
         public Publisher Publisher { get; set; }
 
-        public DateTime? ReleaseDate { get; set; }
+        public DateTime ReleaseDate { get; set; }
 
         public int? CopiesNumber { get; set; }
 

@@ -1,6 +1,6 @@
 ﻿namespace Library.BusinessLogic.DTOs
 {
-    public class BookAuthorDTO : BaseDTO
+    public class BookAuthorDTO
     {
         public int BookId { get; set; }
 
