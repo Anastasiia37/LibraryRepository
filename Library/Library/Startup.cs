@@ -11,7 +11,7 @@ using Library.BusinessLogic.Interfaces;
 using Library.BusinessLogic.Services;
 using Library.DAL.Repositories;
 using AutoMapper;
-using System;
+using Library.Helpers;
 
 namespace Library
 {
@@ -35,6 +35,7 @@ namespace Library
             AddBusinessLogicServices(services);
 
             services.AddAutoMapper(typeof(MappingProfile));
+            services.AddSwaggerGen();
 
             services.AddControllersWithViews()
                     .AddNewtonsoftJson(options =>
@@ -56,6 +57,16 @@ namespace Library
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
 
             app.UseRouting();
 

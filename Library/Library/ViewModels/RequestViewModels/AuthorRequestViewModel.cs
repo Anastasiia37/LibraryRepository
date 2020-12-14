@@ -15,7 +15,10 @@ namespace Library.ViewModels.RequestViewModels
         [Required]
         public string FirstName { get; set; }
 
-        public DateTime? BirthDate { get; set; }
+        [Required(ErrorMessage = "BirthDate cannot be empty")]
+        public DateTime BirthDate { get; set; }
+
+        public int? CountryId { get; set; }
 
         public CountryRequestViewModel Country { get; set; }
 

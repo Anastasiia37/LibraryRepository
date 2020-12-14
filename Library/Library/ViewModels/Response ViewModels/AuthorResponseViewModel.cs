@@ -15,7 +15,8 @@ namespace Library.ViewModels.ResponseViewModels
         [Required]
         public string FirstName { get; set; }
 
-        public DateTime? BirthDate { get; set; }
+        [Required]
+        public DateTime BirthDate { get; set; }
 
         public int CountryId { get; set; }
 

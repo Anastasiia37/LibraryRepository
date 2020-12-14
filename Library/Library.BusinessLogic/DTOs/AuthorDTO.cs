@@ -9,7 +9,9 @@ namespace Library.BusinessLogic.DTOs
 
         public string FirstName { get; set; }
 
-        public DateTime? BirthDate { get; set; }
+        public DateTime BirthDate { get; set; }
+
+        public int? CountryId { get; set; }
 
         public CountryDTO Country { get; set; }
 

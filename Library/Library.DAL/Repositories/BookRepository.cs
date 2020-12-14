@@ -18,6 +18,7 @@ namespace Library.DAL.Repositories
             return await _dbContext.Books
                 .Include(book => book.BookAuthors)
                 .ThenInclude(bookAuthor => bookAuthor.Author)
+                .Include(book => book.Publisher)
                 .FirstOrDefaultAsync(book => book.Id == id);
         }
 
@@ -26,6 +27,7 @@ namespace Library.DAL.Repositories
             return await _dbContext.Books
                 .Include(book => book.BookAuthors)
                 .ThenInclude(bookAuthor => bookAuthor.Author)
+                .Include(book => book.Publisher)
                 .ToListAsync();
         }
     }

@@ -12,9 +12,11 @@ namespace Library.ViewModels.RequestViewModels
         [Required]
         public string Title { get; set; }
 
-        public PublisherRequestViewModel Publisher { get; set; }
+        [Required]
+        public int PublisherId { get; set; }
 
-        public DateTime? ReleaseDate { get; set; }
+        [Required]
+        public DateTime ReleaseDate { get; set; }
 
         public int? CopiesNumber { get; set; }
 

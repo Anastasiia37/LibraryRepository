@@ -11,16 +11,15 @@ using Microsoft.Extensions.Logging;
 
 namespace Library.Controllers
 {
-    public class AuthorController : Controller
+    public class AuthorController : BaseController
     {
-        private readonly ILogger<AuthorController> _logger;
         private readonly IAuthorService _authorService;
         private readonly ICountryService _countryService;
         private readonly IMapper _mapper;
 
         public AuthorController(ILogger<AuthorController> logger, IAuthorService authorService, ICountryService countryService, IMapper mapper)
+            : base(logger)
         {
-            _logger = logger;
             _authorService = authorService;
             _mapper = mapper;
             _countryService = countryService;
@@ -43,7 +42,8 @@ namespace Library.Controllers
             return View(_mapper.Map<AuthorResponseViewModel>(author));
         }
 
-        [HttpPost] //?
+        [HttpPost]
+        [ValidateAntiForgeryToken()]
         public async Task<ActionResult> Update(AuthorRequestViewModel author)
         {
             if (ModelState.IsValid)
@@ -55,6 +55,7 @@ namespace Library.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken()]
         public async Task<ActionResult> Create(AuthorRequestViewModel author)
         {
             if (ModelState.IsValid)
@@ -85,14 +86,7 @@ namespace Library.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
         {
-            try
-            {
-                return RedirectToAction(nameof(AuthorList));
-            }
-            catch
-            {
-                return View();
-            }
+            return RedirectToAction(nameof(AuthorList));
         }
 
         // POST: AuthorController/Delete/5
@@ -100,14 +94,7 @@ namespace Library.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
         {
-            try
-            {
-                return RedirectToAction(nameof(AuthorList));
-            }
-            catch
-            {
-                return View();
-            }
+            return RedirectToAction(nameof(AuthorList));
         }
         #endregion
     }

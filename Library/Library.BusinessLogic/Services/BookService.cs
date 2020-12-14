@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using Library.BusinessLogic.DTOs;
@@ -39,14 +40,38 @@ namespace Library.BusinessLogic.Services
             return _mapper.Map<List<BookDTO>>(await _bookRepository.List());
         }
 
-        public async Task<List<BookDTO>> SearchByTitle(string title)
+        public async Task<List<BookDTO>> SearchWithCondition(string title, string releaseDate)
         {
-            return _mapper.Map<List<BookDTO>>(await _bookRepository.List(book => book.Title.Equals(title, StringComparison.InvariantCultureIgnoreCase)));
+            DateTime releaseDateTime;
+            bool isDateParsed = DateTime.TryParse(releaseDate, out releaseDateTime);
+
+            Expression<Func<Book, bool>> predicate;
+
+            if (title == null)
+            {
+                predicate = book => book.ReleaseDate == releaseDateTime;
+            }
+            else if (releaseDate == null)
+            {
+                predicate = book => book.Title.ToUpper() == title.ToUpper();
+            }
+            else
+            {
+                predicate = book => book.Title.ToUpper() == title.ToUpper() && book.ReleaseDate == releaseDateTime;
+            }
+
+            return _mapper.Map<List<BookDTO>>(await _bookRepository.List(predicate));
         }
 
         public async Task<BookDTO> GetById(int id)
         {
             return _mapper.Map<BookDTO>(await _bookRepository.GetById(id));
+        }
+
+        public async Task Delete(int id)
+        {
+            var book = await _bookRepository.GetById(id);
+            await _bookRepository.Delete(book);
         }
     }
 }
