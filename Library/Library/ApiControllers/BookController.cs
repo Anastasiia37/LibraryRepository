@@ -47,16 +47,21 @@ namespace Library.ApiControllers
             return Ok(book);
         }
 
-        [HttpGet("title={title}&releaseDate={releaseDate}")]
-        public async Task<IActionResult> Get(string title, string releaseDate)
+        [HttpPost("search")]
+        public async Task<IActionResult> Search([FromBody] BookSearchRequestViewModel bookRequest)
         {
-            if (title == null && releaseDate == null)
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid input");
+            }
+
+            if (bookRequest.Title == null && bookRequest.ReleaseDate == null)
             {
                 return BadRequest();
             }
 
             var book = _mapper.Map<List<BookResponseViewModel>>
-                (await _bookService.SearchWithCondition(title, releaseDate));
+                (await _bookService.SearchWithCondition(bookRequest.Title, bookRequest.ReleaseDate));
 
             if (book == null)
             {

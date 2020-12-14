@@ -40,16 +40,13 @@ namespace Library.BusinessLogic.Services
             return _mapper.Map<List<BookDTO>>(await _bookRepository.List());
         }
 
-        public async Task<List<BookDTO>> SearchWithCondition(string title, string releaseDate)
+        public async Task<List<BookDTO>> SearchWithCondition(string title, DateTime? releaseDate)
         {
-            DateTime releaseDateTime;
-            bool isDateParsed = DateTime.TryParse(releaseDate, out releaseDateTime);
-
             Expression<Func<Book, bool>> predicate;
 
             if (title == null)
             {
-                predicate = book => book.ReleaseDate == releaseDateTime;
+                predicate = book => book.ReleaseDate == releaseDate;
             }
             else if (releaseDate == null)
             {
@@ -57,7 +54,7 @@ namespace Library.BusinessLogic.Services
             }
             else
             {
-                predicate = book => book.Title.ToUpper() == title.ToUpper() && book.ReleaseDate == releaseDateTime;
+                predicate = book => book.Title.ToUpper() == title.ToUpper() && book.ReleaseDate == releaseDate;
             }
 
             return _mapper.Map<List<BookDTO>>(await _bookRepository.List(predicate));

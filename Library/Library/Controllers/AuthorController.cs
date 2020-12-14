@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Library.BusinessLogic.DTOs;
 using Library.BusinessLogic.Interfaces;
+using Library.Helpers;
 using Library.ViewModels.RequestViewModels;
 using Library.ViewModels.ResponseViewModels;
 using Microsoft.AspNetCore.Http;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Library.Controllers
 {
+    [TypeFilter(typeof(CustomExceptionFilter))]
     public class AuthorController : BaseController
     {
         private readonly IAuthorService _authorService;
@@ -28,6 +30,7 @@ namespace Library.Controllers
         // GET: AuthorController
         public async Task<ActionResult<List<AuthorResponseViewModel>>> AuthorList()
         {
+            //throw new KeyNotFoundException();
             var authors = await _authorService.GetAll();
             return View(_mapper.Map<List<AuthorResponseViewModel>>(authors));
         }

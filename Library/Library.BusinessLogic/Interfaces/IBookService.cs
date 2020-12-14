@@ -15,7 +15,7 @@ namespace Library.BusinessLogic.Interfaces
 
         Task<BookDTO> GetById(int id);
 
-        Task<List<BookDTO>> SearchWithCondition(string title, string releaseDate);
+        Task<List<BookDTO>> SearchWithCondition(string title, DateTime? releaseDate);
 
         Task Delete(int id);
     }

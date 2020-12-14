@@ -13,5 +13,10 @@ namespace Library.Controllers
         {
             return View();
         }
+
+        public IActionResult AddEdit(int id)
+        {
+            return View(id);
+        }
     }
 }

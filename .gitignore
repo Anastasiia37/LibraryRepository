@@ -64,6 +64,9 @@ artifacts/
 # StyleCop
 StyleCopReport.xml
 
+# Bundle files
+*Bundle.js
+
 # Files built by Visual Studio
 *_i.c
 *_p.c
